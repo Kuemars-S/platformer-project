@@ -1,5 +1,6 @@
 #include "enemy_manager.h"
 #include "globals.h"
+#include "player.h"
 
 void EnemiesManager::spawn_enemies() {
     // Create enemies, incrementing their amount every time a new one is created

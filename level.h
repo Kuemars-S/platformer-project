@@ -3,6 +3,7 @@
 
 #include "enemy_manager.h"
 #include "globals.h"
+#include "player_manager.h"
 
 bool is_inside_level(int row, int column) {
     if (row < 0 || row >= current_level.rows) return false;
@@ -79,7 +80,7 @@ void load_level(int offset) {
     current_level = {rows, columns, current_level_data};
 
     // Instantiate entities
-    spawn_player();
+    PlayerManager::getInstance().spawn_player();
     EnemiesManager::getInstance().spawn_enemies();
 
     // Calculate positioning and sizes
