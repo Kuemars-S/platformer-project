@@ -34,9 +34,7 @@ public:
     bool is_player_on_ground{};
     bool is_looking_forward{};
     bool is_moving{};
-
     int player_level_scores[LEVEL_COUNT]{};
-
     const int MAX_PLAYER_LIVES = 3;
     int player_lives = MAX_PLAYER_LIVES;
 
