@@ -2,6 +2,7 @@
 #include "globals.h"
 #include "player.h"
 #include "enemy_manager.h"
+#include "level.h"
 
 void PlayerManager::reset_player_stats() {
     player_lives = MAX_PLAYER_LIVES;
@@ -28,12 +29,12 @@ int PlayerManager::get_total_player_score() const {
 void PlayerManager::spawn_player() {
     player.set_y_velocity(0);
 
-    for (size_t row = 0; row < current_level.rows; ++row) {
-        for (size_t column = 0; column < current_level.columns; ++column) {
-            if (const char cell = get_level_cell(row, column); cell == PLAYER) {
+    for (size_t row = 0; row < Level::getInstance().get_current_level().rows; ++row) {
+        for (size_t column = 0; column < Level::getInstance().get_current_level().columns; ++column) {
+            if (const char cell = Level::getInstance().get_level_cell(row, column); cell == PLAYER) {
                 player.set_pos({static_cast<float>(column),
                                    static_cast<float>(row)});
-                set_level_cell(row, column, AIR);
+                Level::getInstance().set_level_cell(row, column, AIR);
                 return;
             }
         }
@@ -51,7 +52,7 @@ void PlayerManager::kill_player() {
 void PlayerManager::move_player_horizontally(const float delta) {
     // See if the player can move further without touching a wall;
     // otherwise, prevent them from getting into a wall by rounding their position
-    if (const float next_x = player.get_pos().x + delta; !is_colliding({next_x, player.get_pos().y}, WALL)) {
+    if (const float next_x = player.get_pos().x + delta; !Level::getInstance().is_colliding({next_x, player.get_pos().y}, WALL)) {
         player.set_pos({next_x, player.get_pos().y});
     }
     else {
@@ -66,7 +67,7 @@ void PlayerManager::move_player_horizontally(const float delta) {
 
 void PlayerManager::update_player_gravity() {
     // Bounce downwards if approaching a ceiling with upwards velocity
-    if (is_colliding({player.get_pos().x, player.get_pos().y - 0.1f}, WALL) && player.get_y_velocity() < 0) {
+    if (Level::getInstance().is_colliding({player.get_pos().x, player.get_pos().y - 0.1f}, WALL) && player.get_y_velocity() < 0) {
         player.set_y_velocity(CEILING_BOUNCE_OFF);
     }
 
@@ -76,7 +77,7 @@ void PlayerManager::update_player_gravity() {
 
     // If the player is on ground, zero player's y-velocity
     // If the player is *in* ground, pull them out by rounding their position
-    is_player_on_ground = is_colliding({player.get_pos().x, player.get_pos().y + 0.1f}, WALL);
+    is_player_on_ground = Level::getInstance().is_colliding({player.get_pos().x, player.get_pos().y + 0.1f}, WALL);
     if (is_player_on_ground) {
         player.set_y_velocity(0);
         player.set_pos({player.get_pos().x, roundf(player.get_pos().y)});
@@ -87,12 +88,12 @@ void PlayerManager::update_player() {
     update_player_gravity();
 
     // Interacting with other level elements
-    if (is_colliding(player.get_pos(), COIN)) {
-        get_collider(player.get_pos(), COIN) = AIR; // Removes the coin
+    if (Level::getInstance().is_colliding(player.get_pos(), COIN)) {
+        Level::getInstance().get_collider(player.get_pos(), COIN) = AIR; // Removes the coin
         increment_player_score();
     }
 
-    if (is_colliding(player.get_pos(), EXIT)) {
+    if (Level::getInstance().is_colliding(player.get_pos(), EXIT)) {
         // Reward player for being swift
         if (timer > 0) {
             // For every 9 seconds remaining, award the player 1 coin
@@ -106,7 +107,7 @@ void PlayerManager::update_player() {
         }
         else {
             // Allow the player to exit after the level timer goes to zero
-            load_level(1);
+            Level::getInstance().load_level(1);
             PlaySound(exit_sound);
         }
     }
@@ -116,7 +117,7 @@ void PlayerManager::update_player() {
     }
 
     // Kill the player if they touch a spike or fall below the level
-    if (is_colliding(player.get_pos(), SPIKE) || player.get_pos().y > static_cast<float>(current_level.rows)) {
+    if (Level::getInstance().is_colliding(player.get_pos(), SPIKE) || player.get_pos().y > static_cast<float>(Level::getInstance().get_current_level().rows)) {
         kill_player();
     }
 

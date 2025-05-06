@@ -16,7 +16,7 @@ void update_game() {
             if (IsKeyPressed(KEY_ENTER)) {
                 SetExitKey(0);
                 game_state = GAME_STATE;
-                load_level(0);
+                Level::getInstance().load_level(0);
             }
             break;
 
@@ -30,7 +30,7 @@ void update_game() {
             }
 
             // Calculating collisions to decide whether the player is allowed to jump
-            PlayerManager::getInstance().is_player_on_ground = is_colliding({PlayerManager::getInstance().get_player().get_pos().x, PlayerManager::getInstance().get_player().get_pos().y + 0.1f}, WALL);
+            PlayerManager::getInstance().is_player_on_ground = Level::getInstance().is_colliding({PlayerManager::getInstance().get_player().get_pos().x, PlayerManager::getInstance().get_player().get_pos().y + 0.1f}, WALL);
         if ((IsKeyDown(KEY_UP) || IsKeyDown(KEY_W) || IsKeyDown(KEY_SPACE)) && PlayerManager::getInstance().is_player_on_ground) {
             PlayerManager::getInstance().try_jump();
             }
@@ -54,7 +54,7 @@ void update_game() {
 
             if (IsKeyPressed(KEY_ENTER)) {
                 if (PlayerManager::getInstance().player_lives > 0) {
-                    load_level(0);
+                    Level::getInstance().load_level(0);
                     game_state = GAME_STATE;
                 }
                 else {
@@ -66,16 +66,16 @@ void update_game() {
 
         case GAME_OVER_STATE:
             if (IsKeyPressed(KEY_ENTER)) {
-                reset_level_index();
+                Level::getInstance().reset_level_index();
                 PlayerManager::getInstance().reset_player_stats();
                 game_state = GAME_STATE;
-                load_level(0);
+                Level::getInstance().load_level(0);
             }
             break;
 
         case VICTORY_STATE:
             if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_ESCAPE)) {
-                reset_level_index();
+                Level::getInstance().reset_level_index();
                 PlayerManager::getInstance().reset_player_stats();
                 game_state = MENU_STATE;
                 SetExitKey(KEY_ESCAPE);
@@ -128,7 +128,7 @@ int main() {
     load_fonts();
     load_images();
     load_sounds();
-    load_level();
+    Level::getInstance().load_level();
 
     while (!WindowShouldClose()) {
         BeginDrawing();
@@ -139,7 +139,7 @@ int main() {
         EndDrawing();
     }
 
-    unload_level();
+    Level::getInstance().unload_level();
     unload_sounds();
     unload_images();
     unload_fonts();

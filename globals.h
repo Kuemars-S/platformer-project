@@ -95,8 +95,8 @@ inline level LEVELS[LEVEL_COUNT] = {
 
 /* Loaded Level Data */
 
-inline level current_level;
-inline char *current_level_data;
+// inline level current_level;
+// inline char *current_level_data;
 
 /* Timer-mechanic related */
 inline const int MAX_LEVEL_TIME = 50 * 60;
@@ -315,16 +315,16 @@ void draw_victory_menu();
 
 // LEVEL_H
 
-bool is_inside_level(int row, int column);
-bool is_colliding(Vector2 pos, char look_for = '#');
-char& get_collider(Vector2 pos, char look_for);
-
-void reset_level_index();
-void load_level(int offset = 0);
-void unload_level();
-
-char& get_level_cell(size_t row, size_t column);
-void set_level_cell(size_t row, size_t column, char chr);
+// bool is_inside_level(int row, int column);
+// bool is_colliding(Vector2 pos, char look_for = '#');
+// char& get_collider(Vector2 pos, char look_for);
+//
+// void reset_level_index();
+// void load_level(int offset = 0);
+// void unload_level();
+//
+// char& get_level_cell(size_t row, size_t column);
+// void set_level_cell(size_t row, size_t column, char chr);
 
 // PLAYER_H
 
