@@ -31,6 +31,36 @@ public:
         return player;
     }
 
+    [[nodiscard]] int get_player_lives() const {
+        return player_lives;
+    }
+
+    [[nodiscard]] bool get_is_player_on_ground() const {
+        return is_player_on_ground;
+    }
+
+    void set_is_player_on_ground(const bool on_ground) {
+        is_player_on_ground = on_ground;
+    }
+
+    [[nodiscard]] bool get_is_looking_forward() const {
+        return is_looking_forward;
+    }
+
+    [[nodiscard]] bool get_is_moving() const {
+        return is_moving;
+    }
+
+    void set_is_moving(const bool is_moving) {
+        this->is_moving = is_moving;
+    }
+
+    [[nodiscard]] int get_max_player_lives() const {
+        return MAX_PLAYER_LIVES;
+    }
+
+
+private:
     bool is_player_on_ground{};
     bool is_looking_forward{};
     bool is_moving{};
@@ -38,7 +68,6 @@ public:
     const int MAX_PLAYER_LIVES = 3;
     int player_lives = MAX_PLAYER_LIVES;
 
-private:
     PlayerManager()
       :
         is_looking_forward(true),

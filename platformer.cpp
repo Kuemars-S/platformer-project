@@ -30,8 +30,8 @@ void update_game() {
             }
 
             // Calculating collisions to decide whether the player is allowed to jump
-            PlayerManager::getInstance().is_player_on_ground = Level::getInstance().is_colliding({PlayerManager::getInstance().get_player().get_pos().x, PlayerManager::getInstance().get_player().get_pos().y + 0.1f}, WALL);
-        if ((IsKeyDown(KEY_UP) || IsKeyDown(KEY_W) || IsKeyDown(KEY_SPACE)) && PlayerManager::getInstance().is_player_on_ground) {
+            PlayerManager::getInstance().set_is_moving(Level::getInstance().is_colliding({PlayerManager::getInstance().get_player().get_pos().x, PlayerManager::getInstance().get_player().get_pos().y + 0.1f}, WALL));
+        if ((IsKeyDown(KEY_UP) || IsKeyDown(KEY_W) || IsKeyDown(KEY_SPACE)) && PlayerManager::getInstance().get_is_player_on_ground()) {
             PlayerManager::getInstance().try_jump();
             }
 
@@ -53,7 +53,7 @@ void update_game() {
             PlayerManager::getInstance().update_player_gravity();
 
             if (IsKeyPressed(KEY_ENTER)) {
-                if (PlayerManager::getInstance().player_lives > 0) {
+                if (PlayerManager::getInstance().get_player_lives() > 0) {
                     Level::getInstance().load_level(0);
                     game_state = GAME_STATE;
                 }
