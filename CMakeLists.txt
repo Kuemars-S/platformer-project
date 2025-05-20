@@ -12,6 +12,6 @@ endif()
 
 add_executable(platformer platformer.cpp globals.h graphics.h level.h player.h player_manager.cpp
         player_manager.h enemy.h enemy_manager.cpp enemy_manager.h assets.h utilities.h
-        level.cpp
+        level_manager.h level_manager.cpp
 )
 target_link_libraries(platformer PRIVATE raylib)
